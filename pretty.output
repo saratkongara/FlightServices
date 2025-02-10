@@ -1,0 +1,20 @@
+Feature: Authentication # features/login.feature:1
+  In order to validate authentication API
+  As a tester
+  I want to make sure that everything works as expected
+  Scenario: Successful Login                                             # features/login.feature:7
+    Given I make a POST request to http://127.0.0.1:8000/api-token-auth/ # features/steps/api_steps.py:6
+    And I set header Content-Type to application/json                    # features/steps/api_steps.py:19
+    And I set body to                                                    # features/steps/api_steps.py:51
+      """
+      {
+        "username": "appuser1",
+        "password": "secret123$"
+      }
+      """
+    When I send the request                                              # features/steps/api_steps.py:64
+    Then I expect response status to be 200                              # features/steps/api_steps.py:81
+      Assertion Failed: Expected 200, got 500
+
+    And I store JSON response at token as user_token                     # None
+

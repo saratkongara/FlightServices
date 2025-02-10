@@ -1,0 +1,18 @@
+[
+  {
+    "model": "flightApp.reservation",
+    "pk": 1,
+    "fields": {
+      "flight": 1,
+      "passenger": 1
+    }
+  },
+  {
+    "model": "flightApp.reservation",
+    "pk": 2,
+    "fields": {
+      "flight": 2,
+      "passenger": 2
+    }
+  }
+]

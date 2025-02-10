@@ -1,0 +1,24 @@
+[
+  {
+    "model": "flightApp.passenger",
+    "pk": 1,
+    "fields": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "middleName": "A",
+      "email": "johndoe@example.com",
+      "phone": "9876543210"
+    }
+  },
+  {
+    "model": "flightApp.passenger",
+    "pk": 2,
+    "fields": {
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "middleName": "B",
+      "email": "janesmith@example.com",
+      "phone": "8765432109"
+    }
+  }
+]

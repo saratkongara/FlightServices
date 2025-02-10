@@ -1,0 +1,26 @@
+[
+  {
+    "model": "flightApp.flight",
+    "pk": 1,
+    "fields": {
+      "flightNumber": "AI101",
+      "operatingAirlines": "Air India",
+      "departureCity": "Delhi",
+      "arrivalCity": "Mumbai",
+      "dateOfDeparture": "2024-09-15",
+      "estimatedTimeOfDeparture": "14:30:00"
+    }
+  },
+  {
+    "model": "flightApp.flight",
+    "pk": 2,
+    "fields": {
+      "flightNumber": "BA202",
+      "operatingAirlines": "British Airways",
+      "departureCity": "London",
+      "arrivalCity": "New York",
+      "dateOfDeparture": "2024-09-16",
+      "estimatedTimeOfDeparture": "08:00:00"
+    }
+  }
+]
