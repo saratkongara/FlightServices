@@ -58,7 +58,7 @@ def before_all(context):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
     )
-    time.sleep(5)  # ⏳ Give the server time to start
+    time.sleep(3)  # ⏳ Give the server time to start
 
     # ✅ Check if the server is running
     if test_server_process.poll() is None:

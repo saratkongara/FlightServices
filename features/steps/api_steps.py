@@ -8,7 +8,7 @@ def step_make_request(context, method, endpoint):
     """ Initializes a request with method and endpoint. """
     context.method = method.upper()
     context.endpoint = endpoint
-    context.headers = {}
+    context.headers = getattr(context, "headers", {})
     context.params = {}
     context.cookies = {}
     context.data = None
@@ -30,6 +30,28 @@ def step_set_query_param(context, key, value):
 def step_set_cookie(context, key, value):
     """ Sets a cookie in the request. """
     context.cookies[key] = value
+
+@given('I authenticate as user {username}')
+def step_authenticate_and_get_token(context, username):
+    url = "http://127.0.0.1:9000/api-token-auth/"
+    data = {
+        "username": username,
+        "password": "secret123$"
+    }
+
+    response = requests.post(url, json=data)
+
+    if response.status_code == 200:
+        token = response.json().get("token")
+        if token:
+            print("Token:", token)
+        else:
+            print("Token not found in response")
+    else:
+        print("Error:", response.status_code, response.text)
+
+    context.headers = {}
+    context.headers["Authorization"] = f"Token {token}"
 
 @given('I set Basic Auth with username {username} and password {password}')
 def step_set_basic_auth(context, username, password):
