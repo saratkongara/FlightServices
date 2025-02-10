@@ -1,0 +1,13 @@
+[
+    {
+      "model": "auth.user",
+      "pk": 1,
+      "fields": {
+        "username": "apiuser1",
+        "password": "pbkdf2_sha256$870000$HiiPsGVezvvsBlspvizaq1$/icDQKtfqyhwKGzgP5M0M2RR59sMi1kMGbUt9s/gbo0=",
+        "email": "test@example.com",
+        "is_active": true
+      }
+    }
+  ]
+  

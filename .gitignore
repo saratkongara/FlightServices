@@ -172,3 +172,5 @@ cython_debug/
 
 .DS_Store
 test_db.sqlite3
+pretty.output
+test_db_dump.sql

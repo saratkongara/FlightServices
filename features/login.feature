@@ -5,12 +5,12 @@ Feature: Authentication
   I want to make sure that everything works as expected
 
   Scenario: Successful Login
-    Given I make a POST request to http://127.0.0.1:8000/api-token-auth/
+    Given I make a POST request to http://127.0.0.1:9000/api-token-auth/
     And I set header Content-Type to application/json
     And I set body to
       """
       {
-        "username": "appuser1",
+        "username": "apiuser1",
         "password": "secret123$"
       }
       """

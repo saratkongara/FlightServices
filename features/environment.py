@@ -48,16 +48,19 @@ def before_all(context):
     load_fixtures()
     print("✅ Fixtures loaded successfully!")
 
-        # ✅ Start Django test server
+    # ✅ Print user credentials and tokens
+    # print_users_and_tokens()
+
+    # ✅ Start Django test server
     print("🚀 Starting Django test server...")
     test_server_process = subprocess.Popen(
-        ["python3", "manage.py", "runserver", "8000"], 
+        ["python3", "manage.py", "runserver", "9000", "--nothreading", "--noreload"], 
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
     )
     time.sleep(5)  # ⏳ Give the server time to start
 
-        # ✅ Check if the server is running
+    # ✅ Check if the server is running
     if test_server_process.poll() is None:
         print("✅ Django test server started successfully!")
     else:
@@ -68,6 +71,8 @@ def after_all(context):
     """Clean up after all tests."""
     global test_server_process
     test_runner = TestRunner()
+
+    # ✅ Clean up test database
     test_runner.teardown_databases(context.old_config)
     print("🧹 Database cleaned up!")
 
@@ -78,4 +83,47 @@ def after_all(context):
         test_server_process.wait()
         print("✅ Django test server stopped!")
 
-    print("🧹 Database cleaned up!")
+from django.contrib.auth import get_user_model
+from rest_framework.authtoken.models import Token
+from django.db import connection
+
+def print_users_and_tokens():
+    """Fetch and print users' login details and authentication tokens."""
+    User = get_user_model()
+
+    print("\n👤 User Credentials and Tokens:")
+    print("=" * 50)
+
+    with connection.cursor() as cursor:
+        # Fetch users
+        cursor.execute("SELECT id, username, password FROM auth_user;")
+        users = cursor.fetchall()
+
+        # Fetch tokens
+        cursor.execute("SELECT user_id, key FROM authtoken_token;")
+        tokens = dict(cursor.fetchall())  # Convert token results to a dictionary {user_id: token}
+
+    for user_id, username, password_hash in users:
+        token = tokens.get(user_id, "No Token Found")
+        print(f"📌 Username: {username}")
+        print(f"🔑 Password Hash: {password_hash}")
+        print(f"🆔 Token: {token}")
+        print("-" * 50)
+
+import sqlite3
+
+def dump_test_db():
+    # ✅ Get test database path (assuming SQLite)
+    test_db_path = settings.DATABASES["default"]["NAME"]
+    dump_file = "test_db_dump.sql"
+    print(f'test_db_path: {test_db_path}')
+
+    # ✅ Dump the database
+    if os.path.exists(test_db_path):
+        print(f"📦 Dumping test database to {dump_file}...")
+        with open(dump_file, "w") as f:
+            conn = sqlite3.connect(test_db_path)
+            for line in conn.iterdump():
+                f.write(f"{line}\n")
+            conn.close()
+        print(f"✅ Test database dumped successfully to {dump_file}!")

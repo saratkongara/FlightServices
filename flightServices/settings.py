@@ -87,12 +87,15 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
+        "TEST": {
+            "NAME": os.path.join(os.getcwd(), "test_db.sqlite3"),  # Forces test DB to be a file
+        },
     }
 }
 
 # ✅ Check if TEST_DB is set, then switch database
 if os.getenv("TEST_DB") == "true":
-    DATABASES["default"]["NAME"] = BASE_DIR / "test_db.sqlite3"
+    DATABASES["default"]["NAME"] = os.path.join(os.getcwd(), "test_db.sqlite3")
     print(f"⚠️ Using TEST database: {DATABASES['default']['NAME']}")
 
 # Password validation
@@ -135,3 +138,34 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# DEBUG = True
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'verbose': {
+#             'format': '{levelname} {asctime} {module} {message}',
+#             'style': '{',
+#         },
+#     },
+#     'handlers': {
+#         'file': {
+#             'level': 'INFO',  # Change from DEBUG to INFO to reduce logs
+#             'class': 'logging.FileHandler',
+#             'filename': os.path.join(BASE_DIR, 'logs/debug.log'),
+#             'formatter': 'verbose',
+#         },
+#         'console': {
+#             'level': 'INFO',  # Change to INFO
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'verbose',
+#         },
+#     },
+#     'django.db.backends': {  
+#         'handlers': ['file', 'console'],
+#         'level': 'WARNING',  # Change from DEBUG to WARNING to avoid excessive SQL logs
+#         'propagate': False,
+#     },
+# }
