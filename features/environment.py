@@ -1,11 +1,3 @@
-# from fixtures.load_fixtures import load_fixtures
-
-# def before_all(context):
-#     """
-#     Runs once before all tests.
-#     """
-#     load_fixtures()
-
 import os
 import django
 import time
@@ -17,7 +9,7 @@ from django.conf import settings
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "flightServices.settings")
 
 # ✅ Force test database before initializing Django
-os.environ["TEST_DB"] = "true"
+os.environ["DJANGO_ENV"] = "test"
 
 # ✅ Initialize Django
 django.setup()

@@ -1,5 +1,7 @@
 django
 djangorestframework
+pymysql
 behave
 requests
 jsonschema
+python-dotenv

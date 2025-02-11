@@ -13,6 +13,14 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 
+# Setup the MySQL client
+import pymysql
+pymysql.install_as_MySQLdb()
+
+# Load environment variables from .env file
+from dotenv import load_dotenv
+load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -83,21 +91,42 @@ WSGI_APPLICATION = "flightServices.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#         "TEST": {
+#             "NAME": os.path.join(os.getcwd(), "test_db.sqlite3"),  # Forces test DB to be a file
+#         },
+#     }
+# }
+
+# ✅ Check if django env is set to test, then switch database
+# if os.getenv("DJANGO_ENV") == "test":
+#     DATABASES["default"]["NAME"] = os.path.join(os.getcwd(), "test_db.sqlite3")
+#     print(f"⚠️ Using TEST database: {DATABASES['default']['NAME']}")
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-        "TEST": {
-            "NAME": os.path.join(os.getcwd(), "test_db.sqlite3"),  # Forces test DB to be a file
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('DJANGO_DB_NAME', 'flight_services'),
+        'USER': os.getenv('DJANGO_DB_USER', 'user'),
+        'PASSWORD': os.getenv('DJANGO_DB_PASSWORD'),
+        'HOST': os.getenv('DJANGO_DB_HOST', '127.0.0.1'),
+        'PORT': os.getenv('DJANGO_DB_PORT', '3306'),
+        'OPTIONS': {
+            'charset': 'utf8mb4',
         },
-    }
+        'TEST': {
+            'NAME': os.getenv('DJANGO_TEST_DB_NAME', 'test_flight_services'),
+        }
+    },
 }
 
-# ✅ Check if TEST_DB is set, then switch database
-if os.getenv("TEST_DB") == "true":
-    DATABASES["default"]["NAME"] = os.path.join(os.getcwd(), "test_db.sqlite3")
-    print(f"⚠️ Using TEST database: {DATABASES['default']['NAME']}")
-
+# Use the test database when running tests
+if 'test' in os.getenv('DJANGO_ENV', ''):
+    DATABASES['default']['NAME'] = os.getenv('DJANGO_TEST_DB_NAME', 'test_flight_services')
+    
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -138,34 +167,3 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# DEBUG = True
-
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'formatters': {
-#         'verbose': {
-#             'format': '{levelname} {asctime} {module} {message}',
-#             'style': '{',
-#         },
-#     },
-#     'handlers': {
-#         'file': {
-#             'level': 'INFO',  # Change from DEBUG to INFO to reduce logs
-#             'class': 'logging.FileHandler',
-#             'filename': os.path.join(BASE_DIR, 'logs/debug.log'),
-#             'formatter': 'verbose',
-#         },
-#         'console': {
-#             'level': 'INFO',  # Change to INFO
-#             'class': 'logging.StreamHandler',
-#             'formatter': 'verbose',
-#         },
-#     },
-#     'django.db.backends': {  
-#         'handlers': ['file', 'console'],
-#         'level': 'WARNING',  # Change from DEBUG to WARNING to avoid excessive SQL logs
-#         'propagate': False,
-#     },
-# }
