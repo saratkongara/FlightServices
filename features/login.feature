@@ -17,4 +17,5 @@ Feature: Authentication
     When I send the request
     Then I expect response status to be 200
     And I store JSON response at token as user_token
+    And I debug the response
 

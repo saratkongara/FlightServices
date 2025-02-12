@@ -2,6 +2,7 @@ import json
 import requests
 from behave import given, when, then
 from requests.auth import HTTPBasicAuth
+import sys
 
 @given('I make a {method} request to {endpoint}')
 def step_make_request(context, method, endpoint):
@@ -145,3 +146,15 @@ def step_expect_response_time(context, ms):
     """ Validates that response time is within a limit. """
     actual_time = context.response.elapsed.total_seconds() * 1000  # Convert to ms
     assert actual_time < ms, f"Expected response time < {ms}ms, but got {actual_time:.2f}ms"
+
+@then('I debug the response')
+def step_debug_response(context):
+    """ Prints the response for debugging purposes. """
+    try:
+        print("\nResponse Body:\n", json.dumps(context.response.json(), indent=2))
+    except json.JSONDecodeError:
+        print("\nResponse Body:\n", context.response.text)
+    finally:
+        print(f"Response Status: {context.response.status_code}")
+        print(f"Response Headers: {context.response.headers}")
+        sys.stdout.flush()
